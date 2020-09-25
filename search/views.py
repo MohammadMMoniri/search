@@ -18,9 +18,10 @@ class Search(View):
         form = searchfeild(request.POST)
         if form.is_valid():
             print(form['search'].value())
-            search_in_sites(form['search'].value())
+            result = search_in_sites(form['search'].value())
         context = {
             "form" : searchfeild,
+            "results": result,
 
         }
         return render(request, "search/index.html", context)

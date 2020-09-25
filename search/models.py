@@ -2,7 +2,6 @@ from django.db import models
 from bs4 import BeautifulSoup
 import requests
 import re
-import _thread
 
 
 
@@ -10,12 +9,15 @@ def google(inp):
     try:
         request = requests.get("https://www.google.com/search?q={}".format(inp))
     except:
-        return(None)
+        return([None])
+
     soup = BeautifulSoup(request.content, 'html.parser')
     links = []
     for i in soup.find_all('a'):
         pattern = r"/url\?q=(.*)"
-        links.append(re.findall(pattern, i['href']))
+        z = re.search(pattern, i['href'])
+        if z:
+            links.append(z.group(1))
     return(links)
 
 
@@ -25,11 +27,13 @@ def yahoo(inp):
     try:
         request = requests.get("https://search.yahoo.com/search?p={}&fr=yfp-t&ei=UTF-8&fp=1".format(inp))
     except:
-        return(None)
+        return([None])
     soup = BeautifulSoup(request.content, 'html.parser')
     links = []
     for i in soup.find_all('h3', attrs={"class":"title ov-h"}):
-        links.append(i.a['href'])
+        z = i.a['href']
+        if z:
+            links.append(z)
     return(links)
 
 
@@ -66,10 +70,10 @@ def bing(inp):
 
 
 def search_in_sites(inp):
-    try:
-    _thread.start_new_thread(google, inp)
-    _thread.start_new_thread(yahoo, inp)
-    print(yahool)
-    print(googlel)
+    yahool = yahoo(inp)
+    googlel= google(inp)
+    result = yahool + googlel
+    return result
+
 
 search_in_sites("sex")
