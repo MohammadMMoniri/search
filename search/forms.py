@@ -1,4 +1,9 @@
 from django import forms
+from .models import links
 
-class searchfeild(forms.Form):
-    search = forms.CharField(label='search', max_length=200)
+
+
+class searchfeild(forms.ModelForm):
+    class Meta:
+        model = links
+        fields = ['searched_word']

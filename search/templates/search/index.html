@@ -10,7 +10,7 @@
 
 {% if results %}
     {% for result in results %}
-        <a href="{{result}}">{{result}}</a>
+        <a href="{{result.link}}">{{result.link}}</a>
         <br>
     {% endfor %}
 {% endif %}
