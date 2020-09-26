@@ -1,28 +1,27 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+import multiprocessing
 
 
 
-def google(inp):
+def google(inp, llist):
     try:
         request = requests.get("https://www.google.com/search?q={}".format(inp))
     except:
         return([None])
 
     soup = BeautifulSoup(request.content, 'html.parser')
-    links = []
     for i in soup.find_all('a'):
         pattern = r"/url\?q=(.*)"
         z = re.search(pattern, i['href'])
         if z:
-            links.append(z.group(1))
-    return(links)
+            llist.append(z.group(1))
 
 
 
 
-def yahoo(inp):
+def yahoo(inp, llist):
     try:
         request = requests.get("https://search.yahoo.com/search?p={}&fr=yfp-t&ei=UTF-8&fp=1".format(inp))
     except:
@@ -32,9 +31,7 @@ def yahoo(inp):
     for i in soup.find_all('h3', attrs={"class":"title ov-h"}):
         z = i.a['href']
         if z:
-            links.append(z)
-    return(links)
-
+            llist.append(z)
 
 
 def duckgo(inp):
@@ -69,7 +66,12 @@ def bing(inp):
 
 
 def search_in_sites(inp):
-    yahool = yahoo(inp)
-    googlel= google(inp)
-    result = yahool + googlel
-    return result
+    linkslist = []
+    p1 = multiprocessing.Process(target=google, args=(inp, linkslist))
+    p2 = multiprocessing.Process(target=yahoo, args=(inp, linkslist))
+    p1.start()
+    p2.start()
+    p1.join()
+    p2.join()
+
+    return linkslist

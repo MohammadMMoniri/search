@@ -19,6 +19,7 @@ class Search(View):
         form = searchfeild(request.POST)
         if form.is_valid():
             word = form.cleaned_data.get('searched_word')
+            print(word)
             query = links.objects.filter(searched_word=word)
             if query:
                 result = query

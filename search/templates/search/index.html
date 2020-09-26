@@ -1,16 +1,10 @@
-<br>
-<br>
-<br>
-<br>
-<form method="POST">
-    {% csrf_token %}
-{{form}}
-<input type="submit" value="search">
-</form>
-
-{% if results %}
-    {% for result in results %}
-        <a href="{{result.link}}">{{result.link}}</a>
-        <br>
-    {% endfor %}
-{% endif %}
+{% extends 'search/base.html' %}
+{% block content %}
+    {% if results %}
+    results:<br />
+        {% for result in results %}
+            <a href="{{result.link}}">{{result.link}}</a>
+            <br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
