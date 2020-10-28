@@ -4,7 +4,6 @@ import re
 import multiprocessing
 
 
-
 def google(inp, llist):
     try:
         request = requests.get("https://www.google.com/search?q={}".format(inp))
@@ -17,8 +16,6 @@ def google(inp, llist):
         z = re.search(pattern, i['href'])
         if z:
             llist.append(z.group(1))
-
-
 
 
 def yahoo(inp, llist):
@@ -42,9 +39,8 @@ def duckgo(inp):
     for i in soup.find_all('h2',attrs={"class":"result__title"}):
         print(i)
         links += re.findall(pattern, i['href'])
-    return(links)
+    return links
 
-# duckgo("salam")
 
 def bing(inp):
     try:
@@ -61,17 +57,18 @@ def bing(inp):
         print(i.find('a')['href'])
         links += i
     print(links)
-    return(links)
+    return links
     
 
-
 def search_in_sites(inp):
-    linkslist = []
-    p1 = multiprocessing.Process(target=google, args=(inp, linkslist))
-    p2 = multiprocessing.Process(target=yahoo, args=(inp, linkslist))
-    p1.start()
-    p2.start()
-    p1.join()
-    p2.join()
+    links_list = []
+    # p1 = multiprocessing.Process(target=google, args=(inp, links_list))
+    # p2 = multiprocessing.Process(target=yahoo, args=(inp, links_list))
+    # p1.start()
+    # p2.start()
+    # p1.join()
+    # p2.join()
+    google(inp, links_list)
+    yahoo(inp, links_list)
 
-    return linkslist
+    return links_list
